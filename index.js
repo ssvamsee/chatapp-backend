@@ -7,6 +7,18 @@ const cookiesParser = require('cookie-parser')
 const { app, server } = require('./socket/index')
 
 // const app = express()
+
+app.use(function(req, res, next) {
+    const allowedReferer = process.env.FRONTEND_URL ;
+
+    const referer = req.get('Referer') || req.get('referer') ;
+
+    if (referer && referer.startsWith(allowedReferer)) {
+        res.setHeader('Access-Control-Allow-Origin', referer);
+    }
+    next();
+});
+
 app.use(cors({
     origin : process.env.FRONTEND_URL,
     credentials : true
