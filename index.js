@@ -7,28 +7,9 @@ const cookiesParser = require('cookie-parser')
 const { app, server } = require('./socket/index')
 
 // const app = express()
-const whitelist = ["https://ssvamsee.github.io/", "https://ssvamsee.github.io/chatapp", "http://localhost:3000", "http://localhost:4000"]
-function checkReferer(req, res, next) {
-    const referer = req.headers.referer || '';
-    if (whitelist.some(allowedReferer => referer.startsWith(allowedReferer)) || !referer) {
-      if (referer) {
-        req.headers.origin = referer;
-      }
-      next();
-    } else {
-      res.status(403).json({ error: 'Not allowed by CORS' });
-    }
-  }
-  app.use(checkReferer);
 
-  const corsOptions = {
-    origin: function (origin, callback) {
-      callback(null, true);
-    },
-    credentials:true
-  };
   
-app.use(cors(corsOptions));
+app.use(cors("*"));
 
 app.use(express.json())
 app.use(cookiesParser())
